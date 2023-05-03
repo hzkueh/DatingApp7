@@ -52,7 +52,7 @@ export class MembersService {
 
     if(response) return of(response);
 
-    let params = this.GetPaginationHeaders(userParams.pageNumber, userParams.pageSize);
+    let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
 
     params = params.append('minAge', userParams.minAge);
     params = params.append('maxAge', userParams.maxAge);
@@ -83,7 +83,7 @@ export class MembersService {
     );
   }
 
-  private GetPaginationHeaders(pageNumber: number, pageSize: number) {
+  private getPaginationHeaders(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
       params = params.append('pageNumber', pageNumber);
@@ -115,5 +115,17 @@ export class MembersService {
 
   deletePhoto(photoId : number){
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
+  }
+
+  addLike(username : string){
+    return this.http.post(this.baseUrl + 'likes/' + username, {} )
+  }
+
+  getLikes(predicate : string, pageNumber: number, pageSize: number){
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+
+    params = params.append('predicate',predicate);
+
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'likes', params);
   }
 }
