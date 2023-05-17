@@ -12,6 +12,7 @@ using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using AutoMapper;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,7 @@ namespace API.Controllers
             _photoservice = photoService;
         }
 
-        
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<PagedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams){
 
@@ -57,7 +58,7 @@ namespace API.Controllers
             
         }
 
-        
+
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username){
             return await _userRepository.GetMemberAsync(username);
